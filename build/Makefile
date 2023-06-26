@@ -25,7 +25,7 @@ CXXFLAGS = -Wall -O2
 #CXXFLAGS = -Wall -g
 ### CXXFLAGS = 
 LDFLAGS = $(shell root-config --cflags --glibs)
-EXEC = nptf.rep
+EXEC = concu.rep
 ### include folders	: local, namespace, object
 LOINC = $(mainFolder)/source/include
 NSINC = $(repNamespaces)/include

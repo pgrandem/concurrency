@@ -25,20 +25,5 @@ using namespace std;
 void dumpCheck()
 { cout << "dumpCheck()" << endl; }
 
-/// dumpGlobals 
-/// ----------------------------------------------------------------------------
-/// dump the list of global variables
-void dumpGlobals()
-{
-  /// header
-  RDump::header("dumpGlobals");
-  /// dump the list of global strings
-  cout << "gtimerstart:   " 	<< gtimerstart 		<< endl;
-  cout << "projectFolder: "		<< projectFolder 	<< endl;
-  cout << "dataFolder:    "		<< dataFolder 		<< endl;
-  cout << "repNamespaces: " 	<< repNamespaces 	<< endl;
-  cout << "repObjects:    "		<< repObjects 		<< endl;
-}
-
 
 

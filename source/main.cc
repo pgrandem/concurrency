@@ -1,53 +1,42 @@
 /// main.cc
 /// ************************************************************************ ///
-/// main.cc for "nptf: Null Project To Fork"
+/// main.cc for "concurrency"
 /// Pierre GRANDEMANGE
-/// 01/03/2022
+/// 27/06/2023
 /// ************************************************************************ ///
 
 /// includes and namespaces
 /// ****************************************************************************
-/// standard library
-#include <ctime>		/// clock_t, clock(), CLOCKS_PER_SEC
-#include <iostream>		/// input output streams
-#include <stdlib.h>		/// getenv, system
-#include <string> 		/// c++ string types
-/// root classes
-/// rep classes
-#include "RDump.h"
-/// rep namespaces
-/// local functions
-#include "localFunctions.h"
-/// namespace
+#include <algorithm>
+#include <iostream>	
+#include <thread>
 using namespace std;
 
-/// define initialized const global variable (external linkage)
-/// ****************************************************************************
-extern const clock_t 		gtimerstart(clock()); 			/// main timer
-extern const std::string	projectFolder(getenv("mainFolder"));
-extern const std::string	dataFolder(getenv("data"));
-extern const std::string 	repNamespaces(getenv("repNamespaces"));
-extern const std::string 	repObjects(getenv("repObjects"));
+
 
 /// prototypes
 /// ****************************************************************************
-void hiRep();  							/// hello world test function
+void fun();
+
+
 
 /// main program
 /// ****************************************************************************
-int main(int argc, char* argv[])
+int main()
 {
-	/// main intro
-	RDump::title("main.cc start");
-			
-	/// main : here it goes!
-	hiRep();
-	dumpGlobals();
-	for( int i=1; i<argc; ++i  ) { cout << argv[i] << endl; }
+	vector<thread> workers;
+	for(size_t i=0; i<10; i++) {
+		workers.push_back( thread( [i](){ 
+			cout << "in thread " << i << endl; 
+		}));
+	} 
+	
+	cout << "hi rep" << endl;
+	
+	for_each( workers.begin(), workers.end(), [](std::thread & th) { 
+		th.join(); 
+	});
 
-	/// main outro
-	RDump::title("main.cc end");
-	RDump::timer(gtimerstart); cout << endl;
 	return 0;
 }
 
@@ -58,8 +47,8 @@ int main(int argc, char* argv[])
 /// functions
 /// ****************************************************************************
 
-/// hiRep()
+/// fun
 /// ----------------------------------------------------------------------------
 /// hello rep test function
-void hiRep() { cout << endl << "hi rep, you are awesome!" << endl; }
+void fun() { cout << endl << "hi rep, you are awesome!" << endl; }
 
