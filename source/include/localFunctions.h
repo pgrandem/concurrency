@@ -12,14 +12,23 @@
 #include <cassert>
 #include <chrono>
 #include <cmath>
+#include <future>
 #include <iostream>	
 #include <list>
+#include <string>
 #include <thread>
 /// root classes
 /// rep classes
 /// rep namespaces
 
 
+
+/// concu_part4
+/// ----------------------------------------------------------------------------
+void concu_part4_main2();
+std::string concu_part4_fun(); 
+void concu_part4_main();
+void concu_part4_thfun(std::promise<std::string> && prms); 
 
 /// concu_part3
 /// ----------------------------------------------------------------------------

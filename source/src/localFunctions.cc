@@ -11,6 +11,58 @@ using namespace std;
 
 
 
+/// concu_part4
+/// ----------------------------------------------------------------------------
+void concu_part4_main2()
+{
+	future ftr = async(&concu_part4_fun);
+	cout << "hello from main" << endl;
+	string str = ftr.get(); 
+	cout << str << endl;
+}
+
+string concu_part4_fun()
+{
+	string str = "hello from the future";
+	return str;
+}
+
+
+void concu_part4_main()
+{
+	promise<string> prms ;
+	future<string> 	ftr = prms.get_future();
+	thread th(&concu_part4_thfun, move(prms));
+	cout << "hello from main" << endl;
+	try {
+		string str = ftr.get();
+		cout << str << endl;
+	}
+	catch(exception & e) {
+		cout << e.what() << endl;
+	}
+	th.join();
+}
+
+void concu_part4_thfun(promise<string> && prms)
+{
+	try {
+		string str = "hello from the future";
+		//throw(std::exception("exception from the future!"));
+		throw(std::exception());
+		prms.set_value(str);
+	}
+	catch(...) {
+		prms.set_exception(std::current_exception());
+	}
+	
+}
+
+
+
+
+
+
 /// concu_part3
 /// ----------------------------------------------------------------------------
 void concu_part3_main()
