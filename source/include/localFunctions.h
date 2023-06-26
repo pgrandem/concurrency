@@ -5,34 +5,38 @@
 /// 01/03/2022
 /// ************************************************************************ ///
 
-
-
-
-
 /// includes
 /// ****************************************************************************
 /// standard library
-#include <string>
+#include <algorithm>
+#include <cassert>
+#include <chrono>
+#include <cmath>
+#include <iostream>	
+#include <list>
+#include <thread>
 /// root classes
 /// rep classes
 /// rep namespaces
 
 
 
-
-
-/// manual for this code
-/// ****************************************************************************
-/// - functions should be written in alphabetical order
-
-
-
-
-
-/// debug functions
-/// ****************************************************************************
-
-/// dumpCheck
+/// concu_part3
 /// ----------------------------------------------------------------------------
-void dumpCheck();
+void concu_part3_main();
+void concu_part3_toSin(std::list<double> && list); 
+
+/// concu_part2
+/// ----------------------------------------------------------------------------
+void concu_part2();
+void concu_part2_thfun(int & i);
+void concu_part2_test(std::vector<std::thread> & workers);
+
+
+/// concu_part1
+/// ----------------------------------------------------------------------------
+void concu_part1();
+
+
+
 

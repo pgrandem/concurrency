@@ -7,9 +7,9 @@
 
 /// includes and namespaces
 /// ****************************************************************************
-#include <algorithm>
-#include <iostream>	
-#include <thread>
+/// standard library
+/// my headers
+#include <localFunctions.h>
 using namespace std;
 
 
@@ -24,19 +24,7 @@ void fun();
 /// ****************************************************************************
 int main()
 {
-	vector<thread> workers;
-	for(size_t i=0; i<10; i++) {
-		workers.push_back( thread( [i](){ 
-			cout << "in thread " << i << endl; 
-		}));
-	} 
-	
-	cout << "hi rep" << endl;
-	
-	for_each( workers.begin(), workers.end(), [](std::thread & th) { 
-		th.join(); 
-	});
-
+	concu_part3_main();
 	return 0;
 }
 
