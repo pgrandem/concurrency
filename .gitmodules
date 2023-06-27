@@ -1,0 +1,3 @@
+[submodule "cppshare"]
+	path = cppshare
+	url = git@github.com:pgrandem/cppshare.git
