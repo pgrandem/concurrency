@@ -19,8 +19,14 @@
 #include <thread>
 /// root classes
 /// rep classes
+#include <RNNData.h>
+#include <RNNFast.h>
 /// rep namespaces
 
+
+/// concu_fnn_main
+/// ----------------------------------------------------------------------------
+void concu_rnn_main();
 
 
 /// concu_part4
@@ -40,7 +46,6 @@ void concu_part3_toSin(std::list<double> && list);
 void concu_part2();
 void concu_part2_thfun(int & i);
 void concu_part2_test(std::vector<std::thread> & workers);
-
 
 /// concu_part1
 /// ----------------------------------------------------------------------------

@@ -11,6 +11,52 @@ using namespace std;
 
 
 
+
+/// concu_fnn_main
+/// ----------------------------------------------------------------------------
+void concu_rnn_main()
+{
+	/// hi dude
+	cout << endl << "hi dude" << endl;
+	
+	/// generate data
+	RNNData<double>* dnn = RNNData<double>::mnist(100, 100);
+	
+	/// generate baby network
+	const string					pname = "concurrency";
+	const size_t 					sinpu = dnn->getinputsize();
+	const size_t 					starg = dnn->gettargetsize();
+	const vector<size_t> 	nnphl = {30};
+	RNNFast<double>* rnn = new RNNFast<double>(pname, sinpu, starg, nnphl);
+	
+	/// redo trainer ?
+	const size_t total = dnn->getsettrsize();
+	const size_t batch = 10;
+	const size_t sampl = total / batch;
+	const size_t srest = total % batch;
+
+	cout << "ninpu  batch  train  trest" << endl;
+	cout << total << "  " << batch << "  " << sampl << "  " << srest << endl;
+
+	
+	vector<vector<double>*> shuff(total);
+	for(size_t i=0; i<total; i++) { shuff[i] = &(dnn->ptrtrta[i]); }
+	shuffle(shuff.begin(), shuff.end());
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /// concu_part4
 /// ----------------------------------------------------------------------------
 void concu_part4_main2()
@@ -26,7 +72,6 @@ string concu_part4_fun()
 	string str = "hello from the future";
 	return str;
 }
-
 
 void concu_part4_main()
 {

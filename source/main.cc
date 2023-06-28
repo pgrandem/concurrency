@@ -24,7 +24,14 @@ void fun();
 /// ****************************************************************************
 int main()
 {
-	concu_part4_main2();
+	/// main function
+	concu_rnn_main();
+
+
+
+
+	/// the end
+	cout << endl;
 	return 0;
 }
 
