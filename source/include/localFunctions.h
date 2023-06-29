@@ -21,6 +21,7 @@
 /// rep classes
 #include <RNNData.h>
 #include <RNNFast.h>
+#include <RNNTrainer.h>
 /// rep namespaces
 
 

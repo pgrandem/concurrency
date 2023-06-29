@@ -19,42 +19,42 @@ void concu_rnn_main()
 	/// hi dude
 	cout << endl << "hi dude" << endl;
 	
+	/// parameters
+	const size_t 					trsam = 13;
+	const size_t 					batch = 4;
+	const size_t 					tesam = 13;
+	const string					pname = "concurrency";
+	const vector<size_t> 	nnphl = {30};
+	
 	/// generate data
-	RNNData<double>* dnn = RNNData<double>::mnist(100, 100);
+	RNNData<double>* dnn = RNNData<double>::mnist(23, 23);
 	
 	/// generate baby network
-	const string					pname = "concurrency";
 	const size_t 					sinpu = dnn->getinputsize();
 	const size_t 					starg = dnn->gettargetsize();
-	const vector<size_t> 	nnphl = {30};
 	RNNFast<double>* rnn = new RNNFast<double>(pname, sinpu, starg, nnphl);
+
+
+	/// format data
+	vector<vector<double>>* ptri = dnn->ptrtrin();
+	vector<vector<double>>* ptrt = dnn->ptrtrta();
+	vector<vector<double*>> trin = RNNTrainer<double>::data_batch(ptri, batch);
+	vector<vector<double*>> trta = RNNTrainer<double>::data_batch(ptrt, batch);
 	
-	/// redo trainer ?
-	const size_t total = dnn->getsettrsize();
-	const size_t batch = 10;
-	const size_t sampl = total / batch;
-	const size_t srest = total % batch;
-
-	cout << "ninpu  batch  train  trest" << endl;
-	cout << total << "  " << batch << "  " << sampl << "  " << srest << endl;
-
+	/// multithreading format
+	vector<promise<double>> cost_prom(batch);
+	vector<future<double>> 	cost_futu(batch); 
+	for(size_t i=0; i<cost_prom.size(); i++) { 
+		cost_futu[i] = cost_prom[i].get_future();
+	}
 	
-	vector<vector<double>*> shuff(total);
-	for(size_t i=0; i<total; i++) { shuff[i] = &(dnn->ptrtrta[i]); }
-	shuffle(shuff.begin(), shuff.end());
-
-
+	for(size_t t=0; t < trin.size(); t++) {
+		for(size_t e=0; e < trin[t].size(); e++) {
+			/// do stuff
+		}
+	}
+	
 }
-
-
-
-
-
-
-
-
-
-
 
 
 /// concu_part4
@@ -72,6 +72,7 @@ string concu_part4_fun()
 	string str = "hello from the future";
 	return str;
 }
+
 
 void concu_part4_main()
 {
