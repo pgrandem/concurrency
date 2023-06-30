@@ -25,8 +25,8 @@ void fun();
 int main()
 {
 	/// main function
+	//concu_part5_main();
 	concu_rnn_main();
-
 
 
 

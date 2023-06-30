@@ -5,6 +5,9 @@
 /// 01/03/2022
 /// ************************************************************************ ///
 
+#ifndef DEF_LOCALFUNCTIONS
+#define DEF_LOCALFUNCTIONS
+
 /// includes
 /// ****************************************************************************
 /// standard library
@@ -25,9 +28,41 @@
 /// rep namespaces
 
 
+
+
+
+
+
+/// concu_part5
+/// ----------------------------------------------------------------------------
+void concu_part5_main();
+
+
+
+
+
+
+
 /// concu_fnn_main
 /// ----------------------------------------------------------------------------
 void concu_rnn_main();
+
+/// concu_fnn_ffwd
+/// ----------------------------------------------------------------------------
+template <class T>
+void concu_rnn_ffwd(
+	std::promise<T> 	&& 	prom_cost, 
+	RNNFast<T>* 			& 	net,
+	T* 					& 	inp,
+	T* 					& 	tar
+);
+
+/// concu_fnn_test
+/// ----------------------------------------------------------------------------
+void concu_rnn_test(double* ptr);
+
+
+
 
 
 /// concu_part4
@@ -55,3 +90,4 @@ void concu_part1();
 
 
 
+#endif /// DEF_LOCALFUNCTIONS

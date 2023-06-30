@@ -8,6 +8,52 @@
 #include "localFunctions.h"
 using namespace std;
 
+/// explicit instanciation
+/// ****************************************************************************
+/// see https://stackoverflow.com/questions/495021/
+/// why-can-templates-only-be-implemented-in-the-header-file
+template void concu_rnn_ffwd<double>(
+	std::promise<double> 	&& 	prom_cost, 
+	RNNFast<double>* 			& 	net,
+	double* 							& 	inp,
+	double* 							& 	tar
+);
+
+
+
+
+
+/// local functions
+/// ****************************************************************************
+
+
+
+/// concu_part5
+/// ----------------------------------------------------------------------------
+void concu_part5_main()
+{
+	cout << "main thread id: " << this_thread::get_id() << endl;
+	
+	vector<future<void>> futures;
+	for(size_t i=0; i<1000; i++ ) {
+		future fut = async([] {
+			this_thread::sleep_for(chrono::seconds(1));
+			cout << this_thread::get_id() << "  ";
+		});
+		futures.push_back(move(fut));
+	}
+
+	for_each(futures.begin(), futures.end(), [](future<void> & fut) {
+		fut.wait();
+	});
+	cout << endl;
+	this_thread::sleep_for(chrono::seconds(5));
+}
+
+
+
+
+
 
 
 
@@ -42,19 +88,84 @@ void concu_rnn_main()
 	vector<vector<double*>> trta = RNNTrainer<double>::data_batch(ptrt, batch);
 	
 	/// multithreading format
-	vector<promise<double>> cost_prom(batch);
-	vector<future<double>> 	cost_futu(batch); 
-	for(size_t i=0; i<cost_prom.size(); i++) { 
-		cost_futu[i] = cost_prom[i].get_future();
+	vector<promise<double>> cost_prom;
+	vector<future<double>> 	cost_futu;
+	vector<thread>					cost_thre;
+	for(size_t b=0; b<batch; b++) { 
+		promise<double> temp_prom;
+		future<double> 	temp_futu = temp_prom.get_future();
+		cost_prom.push_back(move(temp_prom));
+		cost_futu.push_back(move(temp_futu)); 
 	}
 	
+	/// training loop
 	for(size_t t=0; t < trin.size(); t++) {
-		for(size_t e=0; e < trin[t].size(); e++) {
-			/// do stuff
+		cost_thre.clear();
+		
+		/// thread/batch loop
+		for(size_t b=0; b < trin[t].size(); b++) {
+			//thread tmp([]{
+			//	cout << this_thread::get_id() << endl;
+			//});
+			//thread tmp(
+			//	&concu_rnn_ffwd<double>, 
+			//	move(cost_prom[b]), 
+			//	ref(rnn), 
+			//	ref(trin[t][b]),
+			//	ref(trta[t][b])
+			//);
+			thread th( &concu_rnn_test, cref(trin[t][b]) );
+			
+			cost_thre.push_back(move(th));
+			//cout << "debug b = " << b << endl;
+			//cout << cost_futu[b].get() << endl;
 		}
-	}
-	
+		
+		/// join threads
+		//for(size_t b=0; b < trin[t].size(); b++) { cost_thre[b].join(); }
+		for_each(cost_thre.begin(), cost_thre.end(), [](thread & th){
+				th.join();
+		});
+
+		/// dump message after join
+		cout << "afterthread message"  << endl << endl;
+	} 
+
+	/// end dump message
+	cout << endl << "the end" << endl;
 }
+
+/// concu_fnn_ffwd
+/// ----------------------------------------------------------------------------
+template <class T>
+void concu_rnn_ffwd(
+	std::promise<T> 	&& 	prom_cost, 
+	RNNFast<T>* 			& 	net,
+	T* 								& 	inp,
+	T* 								& 	tar
+)
+{
+	/// dump
+	cout << this_thread::get_id() << endl;
+
+}
+
+/// concu_fnn_test
+/// ----------------------------------------------------------------------------
+void concu_rnn_test(double* ptr)
+{
+	cout << ptr << endl;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 /// concu_part4
@@ -133,7 +244,7 @@ void concu_part3_toSin(list<double> && list)
 	this_thread::sleep_for(chrono::seconds(1));
 	for_each(list.begin(), list.end(), [](double & x) { x = sin(x); } );
 
-	/// plot lisr
+	/// plot list
 	for_each(list.begin(), list.end(), [](double & x) {
 		int count = static_cast<int>(10*x + 10.5);
 		for( int i=0; i<count; i++ ) { cout << "*"; }
